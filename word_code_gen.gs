@@ -1,0 +1,26 @@
+const words = ['ability', 'absence', 'academy', 'accident', 'activity', 'actor', 'addition', 'adjustment', 'administration', 'adventure', 'advertising', 'advice', 'affect', 'agreement', 'airline', 'airport', 'alcohol', 'alternative', 'ambition', 'analysis', 'analyst', 'anger', 'animal', 'anxiety', 'apology', 'appearance', 'apple', 'application', 'appointment', 'appreciation', 'approval', 'argument', 'arrival', 'article', 'artist', 'aspect', 'assignment', 'assistance', 'assumption', 'atmosphere', 'attention', 'attitude', 'attraction', 'authority', 'awareness', 'balance', 'banana', 'bathroom', 'beauty', 'behavior', 'blessing', 'bother', 'boundary', 'bravery', 'breakfast', 'brother', 'building', 'business', 'calendar', 'campaign', 'candidate', 'capital', 'carpet', 'category', 'celebration', 'ceremony', 'champion', 'character', 'chemistry', 'childhood', 'chocolate', 'cigar', 'circumstance', 'classroom', 'cleaning', 'clothing', 'coaching', 'collection', 'combination', 'comfort', 'command', 'comment', 'commitment', 'communication', 'community', 'comparison', 'competition', 'complaint', 'complexity', 'compromise', 'concentration', 'concept', 'condition', 'confidence', 'conflict', 'confusion', 'connection', 'consciousness', 'conservation', 'consideration', 'consistency', 'construction', 'consultation', 'consumption', 'contribution', 'conversation', 'cooperation', 'courage', 'creation', 'creativity', 'criticism', 'culture', 'curiosity', 'customer', 'database', 'daughter', 'deadline', 'decision', 'definition', 'delivery', 'democracy', 'departure', 'description', 'desire', 'destination', 'destruction', 'determination', 'development', 'difference', 'difficulty', 'dimension', 'disappointment', 'discipline', 'discussion', 'disease', 'dismissal', 'disorder', 'distinction', 'distribution', 'diversity', 'division', 'document', 'education', 'election', 'emergency', 'employment', 'encouragement', 'engineering', 'entertainment', 'enthusiasm', 'environment', 'equipment', 'evaluation', 'examination', 'excitement', 'exercise', 'existence', 'expectation', 'experience', 'experiment', 'explanation', 'expression', 'extension', 'failure', 'familiarity', 'fantasy', 'feedback', 'festival', 'fighting', 'flamingo', 'flexibility', 'flower', 'football', 'formation', 'freedom', 'friendship', 'function', 'furniture', 'gathering', 'generation', 'gentleman', 'girlfriend', 'government', 'graduation', 'grapefruit', 'guidance', 'happiness', 'hardware', 'harmony', 'healthcare', 'heritage', 'highlight', 'honesty', 'hospital', 'household', 'humility', 'hypothesis', 'identification', 'imagination', 'implementation', 'importance', 'improvement', 'independence', 'individual', 'information', 'initiative', 'innovation', 'inspection', 'inspiration', 'instruction', 'intelligence', 'intention', 'interaction', 'interest', 'interpretation', 'introduction', 'investment', 'invitation', 'involvement', 'irritation', 'isolation', 'judgment', 'knowledge', 'landscape', 'leadership', 'learning', 'legislation', 'liberty', 'literature', 'location', 'loyalty', 'management', 'marketing', 'mathematics', 'measurement', 'medicine', 'membership', 'memory', 'motivation', 'mountain', 'negotiation', 'newspaper', 'nutrition', 'obligation', 'observation', 'opportunity', 'organization', 'orientation', 'originality', 'performance', 'personality', 'perspective', 'philosophy', 'photography', 'plastic', 'population', 'possession', 'preparation', 'presentation', 'preservation', 'priority', 'procedure', 'productivity', 'profession', 'promotion', 'protection', 'psychology', 'publication', 'qualification', 'quantity', 'reaction', 'recognition', 'recommendation', 'recovery', 'reflection', 'reform', 'regulation', 'relationship', 'reliability', 'replacement', 'reputation', 'requirement', 'research', 'resistance', 'resolution', 'resource', 'responsibility', 'revolution', 'satisfaction', 'scholarship', 'selection', 'significance', 'situation', 'solution', 'specification', 'sponsorship', 'stability', 'statement', 'statistics', 'strawberry', 'structure', 'substance', 'suggestion', 'supermarket', 'supervision', 'technology', 'television', 'temperature', 'tendency', 'territory', 'tradition', 'transaction', 'transition', 'translation', 'transportation', 'understanding', 'university', 'vegetable', 'visibility', 'vulnerability', 'watermelon', 'weakness', 'wilderness', 'withdrawal', 'wonder', 'workplace', 'xylophone', 'youth', 'zebra'];
+
+
+const seed = "983489302jdh%%$#%$#";
+
+function generateCodes() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    // Concatenate name, email, company name, and seed keycode
+    var stringToHash = data[i][0] + data[i][1] + data[i][2] + seed;
+    // Generate deterministic index for each word in the code
+    var indices = [hashCode(stringToHash + '0') % words.length, hashCode(stringToHash + '1') % words.length];
+    // Combining words at the deterministic indices
+    var code = words[indices[0]].toUpperCase() + words[indices[1]];
+    sheet.getRange(i + 1, 4).setValue(code);
+  }
+}
+
+function hashCode(s) {
+  var h = 0;
+  for (var i = 0; i < s.length; i++) {
+    h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+  }
+  return h;
+}
