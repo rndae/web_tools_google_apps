@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>This is a Google Apps Script web app.</h1>
+      <p>It pings a server every 10 minutes with a code and displays the result.</p>
+      <form id="code-form" action="/exec" method="get">
+        <div class="form-group">
+          <label for="code">Enter a code:</label>
+          <input type="text" id="code" name="code" class="form-control" value="<?= response.code ?>">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <table id="result-table" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Status</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><?= response.code ?></td>
+            <td><?= response.status ?></td>
+            <td><?= response.message ?></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script>
+      var codeInput = document.getElementById("code");
+      var resultTable = document.getElementById("result-table");
+      codeInput.addEventListener("change", function() {
+        var code = codeInput.value;
+        google.script.run.withSuccessHandler(updateTable).sendRequest(code);
+      });
+      function updateTable(response) {
+        var tableBody = resultTable.getElementsByTagName("tbody")[0];
+        var tableRow = tableBody.getElementsByTagName("tr")[0];
+        var tableData = tableRow.getElementsByTagName("td");
+        tableData[0].textContent = response.code;
+        tableData[1].textContent = response.status;
+        tableData[2].textContent = response.message;
+      }
+    </script>
+  </body>
+</html>
